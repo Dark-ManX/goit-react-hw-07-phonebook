@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import {setFilter} from '../../redux/filter';
+import {setFilter} from 'redux/filter';
 
 const Filter = () => {
 
@@ -9,9 +9,9 @@ const Filter = () => {
 console.log(filter)
     const handleFilter = e => {
     const {value} = e.target;
-
-    dispatch(setFilter(value));
-console.log(filter)
+console.log(value);
+//     dispatch(setFilter(value));
+// console.log(filter)
     }
 
     return (

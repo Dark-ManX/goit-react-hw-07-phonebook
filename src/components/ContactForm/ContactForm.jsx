@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {useSelector, useDispatch} from 'react-redux';
+import axios from 'axios';
 import shortid from "shortid";
 import styles from './ContactForm.module.css';
-import { onAdd } from "../../redux/ContactsReducer";
+import { addContact } from "redux/ContactsOperations";
+import { postContacts } from "redux/ContactsActions";
+// import { onAdd } from "../../redux/ContactsReducer";
 
 const { labelStyles } = styles;
 
@@ -12,6 +15,7 @@ export default function ContactForm() {
     const contacts = useSelector(state => state.contacts.list);
     console.log(contacts);
     
+    useEffect(() => {}, [])
 
     const [name, setName] = useState('');
     const [number, setNumber] = useState('');
@@ -33,32 +37,37 @@ export default function ContactForm() {
         }
 }    
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        const checkName = contacts.find(el => (el.name.toLowerCase() === name.trim().toLowerCase()));
-        const checkNumber = contacts.find(el => (el.number === number.trim()));
-        
-        console.log(checkName);
-                console.log(checkNumber);
-
-        if (!checkName || !checkNumber) {
-
-            return dispatch(onAdd({
-                id: shortid.generate(), 
-                name, 
-                number
-            }));
-        }
-
-        alert('Sorry, but you already have equal contacts')
-        reset();
-    }
-
     const reset = () => {
         setName('');
         setNumber('');
     }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        console.log(contacts)
+
+        dispatch(addContact(name, number))
+        // const checkName = contacts.find(el => (el.name.toLowerCase() === name.trim().toLowerCase()));
+        // const checkNumber = contacts.find(el => (el.number === number.trim()));
+        
+        // console.log(checkName);
+        //         console.log(checkNumber);
+
+        // if (!checkName || !checkNumber) {
+
+            
+            // return dispatch(onAdd({
+            //     id: shortid.generate(), 
+            //     name, 
+            //     number
+            // }));
+            console.log(contacts)
+        }
+
+        // alert('Sorry, but you already have equal contacts')
+        // reset();
+    // }
 
     return (
         <form onSubmit={handleSubmit}>
