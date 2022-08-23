@@ -1,21 +1,21 @@
 import { useState, useEffect } from "react";
 import {useSelector, useDispatch} from 'react-redux';
+import { useAddContactMutation } from "redux/ContactsAPI";
 import axios from 'axios';
 import shortid from "shortid";
 import styles from './ContactForm.module.css';
-import { addContact } from "redux/ContactsOperations";
-import { postContacts } from "redux/ContactsActions";
+import { useGetContactsQuery } from "redux/ContactsAPI";
+// import { addContact } from "redux/ContactsOperations";
+// import { postContacts } from "redux/ContactsActions";
 // import { onAdd } from "../../redux/ContactsReducer";
 
 const { labelStyles } = styles;
 
 export default function ContactForm() {
 
-    const dispatch = useDispatch();
-    const contacts = useSelector(state => state.contacts.list);
-    console.log(contacts);
-    
-    useEffect(() => {}, [])
+    const [addContact] = useAddContactMutation();
+    const {data} = useGetContactsQuery();
+    console.log(data)
 
     const [name, setName] = useState('');
     const [number, setNumber] = useState('');
@@ -42,32 +42,25 @@ export default function ContactForm() {
         setNumber('');
     }
 
-    const handleSubmit = (e) => {
+    let include = false
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-
-        console.log(contacts)
-
-        dispatch(addContact(name, number))
-        // const checkName = contacts.find(el => (el.name.toLowerCase() === name.trim().toLowerCase()));
-        // const checkNumber = contacts.find(el => (el.number === number.trim()));
+        reset();
         
-        // console.log(checkName);
-        //         console.log(checkNumber);
+        for (const el of data) {
+            if (el.name === name && el.phone === number) {
+                include = true;
+                alert('such contact already exist');
+                break;
+            }
+        }    
+        
 
-        // if (!checkName || !checkNumber) {
-
-            
-            // return dispatch(onAdd({
-            //     id: shortid.generate(), 
-            //     name, 
-            //     number
-            // }));
-            console.log(contacts)
+        if (!include) {
+            await addContact({name, phone: number});
         }
-
-        // alert('Sorry, but you already have equal contacts')
-        // reset();
-    // }
+    }
 
     return (
         <form onSubmit={handleSubmit}>
