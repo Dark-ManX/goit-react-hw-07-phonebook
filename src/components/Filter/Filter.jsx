@@ -1,14 +1,13 @@
 import PropTypes from 'prop-types';
-import { useSelector, useDispatch} from 'react-redux';
-// import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch} from 'react-redux';
 import {setFilter} from 'redux/filter';
 
 const Filter = () => {
-    // const dispatch = useDispatch();
-    // const filter = useSelector(state => state.filter)
-    
+    const dispatch = useDispatch();
+
     const handleFilter = e => {
-        console.log(e.target.value);
+        const {value} = e.target;
+        dispatch(setFilter(value.trim()));
     };
 
 
